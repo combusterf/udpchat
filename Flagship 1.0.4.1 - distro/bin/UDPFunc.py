@@ -214,12 +214,11 @@ def _color(_list, log):
         [a,c] = _list[0:2]
     else:
         return "Improper Syntax."
+    if c not in colors and c[0]!="#":
+        c='#'+c
     if a.lower() == 'me':
         if c in colors:
             uname[1]=colors[c]
-        elif c[0]!='#':
-            c='#'+c
-            uname[1]=c
         elif c[0]=='#':
             uname[1]=c
         else:
