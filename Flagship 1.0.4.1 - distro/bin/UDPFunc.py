@@ -126,7 +126,7 @@ def _help(_list=['all']):
 def _new(_list, log):
     if len(_list)==2:
         [a,c] = _list[0:2]
-        color = "#04B404"
+        color = "04B404"
     elif len(_list)==3:
         [a,c,color]=_list[0:3]
     else:
@@ -157,8 +157,9 @@ def _new(_list, log):
         log.write("Changed "+oldname+"'s name to "+a+'\n')
         del oldname
     else:
-        UDP_IP2.remove(Users[a][0])
-        del IP_Lookup[Users[a]][0]
+        if Users[Users_l[a.lower()]][0] in UDP_IP2:
+            UDP_IP2.remove(Users[Users_l[a.lower()]][0])
+        del IP_Lookup[Users[Users_l[a.lower()]][0]]
         IP_Lookup[c]=a
         Users[a]=(c,color)
         Users_l[a.lower()]=a
@@ -214,21 +215,15 @@ def _color(_list, log):
     else:
         return "Improper Syntax."
     if a.lower() == 'me':
-        print "BBBBBBBBBBBBBBBBBBBBB"
         if c in colors:
             uname[1]=colors[c]
-            print "HERE"
         elif c[0]!='#':
-            print "OR HERE?"
             c='#'+c
             uname[1]=c
         elif c[0]=='#':
-            print "OR HERE?"
             uname[1]=c
         else:
-            print ">.>"
             return "Improper Syntax."
-        print "..........wut."
         with open("UDPSettings.py","r") as U_File:
             with open("USettemp.txt","w+") as U2:
                 for line in U_File:
