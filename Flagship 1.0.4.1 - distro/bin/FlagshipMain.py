@@ -23,6 +23,7 @@ import tkHyperlinkManager
 import webbrowser
 import urllib2
 import PIL.Image
+import Queue
 
 pubip = urllib2.urlopen('http://ip.42.pl/raw').read()
 done = 0
@@ -39,6 +40,15 @@ if not os.path.exists("./logs"):
     os.makedirs("./logs")
 log = open("./logs/log"+time.strftime("%Y-%m-%d %H%M%S")+".txt", 'w')
 talk = "Talking with "
+
+class Packet:
+    def __init__(self, data, addr):
+        self.mData = data
+        self.mAddress = addr
+
+global eventqueue
+eventqueue = Queue.Queue()
+
 def listen():
     #Main listen loop, QUIT is an event set by either typing /quit or clicking the x
     while not QUIT.isSet():
@@ -47,6 +57,19 @@ def listen():
         sock.bind((UDP_IP, UDP_PORT))
         data, addr = sock.recvfrom(2048) # buffer size is 2048 bytes
         sock.close()
+        # put packets straight on the queue
+        print "received: " + data
+        packet = Packet(data, addr)
+        eventqueue.put(packet)
+    return
+
+def handle():
+    #print "handler"
+    while eventqueue.qsize():
+        packet = eventqueue.get(0)
+        data = packet.mData
+        addr = packet.mAddress
+        print "processing: " + data
         #Listener interpreter, runs if QUIT is not set
         if not QUIT.isSet():
             if (data != ""): #checks if message is not blank
@@ -98,6 +121,7 @@ def listen():
                         sock.sendto("/sys Command didn't work.", (addr[0], UDP_PORT2))
                         sock.close()
             log.flush()
+        del(packet)
     return
 
 
@@ -434,7 +458,7 @@ def func(val):
         print "Already displaying that."
 
 
-            
+
 #---------------------------------------------------#
 #-----------------GRAPHICS MANAGEMENT---------------#
 #---------------------------------------------------#
@@ -450,6 +474,19 @@ if "nt" == os.name:
     base.iconbitmap(bitmap = 'iconfile.ico')
 else:
     base.iconbitmap(bitmap = '@iconfile.xbm')
+
+QUIT=threading.Event()
+QUIT.clear()
+
+# create event handler
+def pollingloop():
+    global QUIT
+    handle()
+    if not QUIT.isSet():
+        base.after(100, pollingloop)
+
+base.after(100, pollingloop)
+
 
 
 menubar = Menu(base)
@@ -538,10 +575,6 @@ w.pack(side=TOP, padx=2, pady=2)
 
 base.protocol("WM_DELETE_WINDOW", handler)
 
-
-
-QUIT=threading.Event()
-QUIT.clear()
 
 
 l=threading.Thread(target=listen)
