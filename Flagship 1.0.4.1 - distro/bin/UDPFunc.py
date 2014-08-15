@@ -6,12 +6,10 @@ from Tkinter import *
 from socket import *
 import urllib
 import re
-import win32gui
 import socket
 import threading
 import sys
 import os
-import winsound
 import time
 from ChatFns import *
 from UDPSettings import *

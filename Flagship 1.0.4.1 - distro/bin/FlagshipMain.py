@@ -10,7 +10,6 @@ import socket
 import threading
 import sys
 import os
-import winsound
 import time
 import UDPFunc
 import tkMessageBox
@@ -52,7 +51,7 @@ def listen():
         if not QUIT.isSet():
             if (data != ""): #checks if message is not blank
                 if data[0]!="/": #checks if it is a listener-side command
-                    winsound.PlaySound("*", winsound.SND_ALIAS|winsound.SND_ASYNC)
+                    #winsound.PlaySound("*", winsound.SND_ALIAS|winsound.SND_ASYNC)
                     if addr[0] in IP_Lookup: #checks if sender IP is in contacts
                         Name = IP_Lookup[addr[0]]
                         if Name == "192.168.1.1":
@@ -334,7 +333,10 @@ def newgchat():
     gchat.title(ChatTitle) 
     gchat.geometry("400x500")
     gchat.resizable(width=TRUE, height=TRUE)
-    gchat.iconbitmap(default='iconfile.ico')
+    if "nt" == os.name:
+        gchat.iconbitmap(bitmap = 'iconfile.ico')
+    else:
+        gchat.iconbitmap(bitmap = '@iconfile.xbm')
     
     #Create the Button to send message
     SendButton = Button(gchat, font=30, text="Send", width="12", height=5,
@@ -444,7 +446,11 @@ base = Tk()
 base.title(WindowTitle)
 base.geometry("400x40")
 base.resizable(width=TRUE, height=TRUE)
-base.iconbitmap(default='iconfile.ico')
+if "nt" == os.name:
+    base.iconbitmap(bitmap = 'iconfile.ico')
+else:
+    base.iconbitmap(bitmap = '@iconfile.xbm')
+
 
 menubar = Menu(base)
 

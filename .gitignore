@@ -36,3 +36,6 @@ Icon
 
 log*.txt
 users*.cfg
+
+# Object files
+*.pyc
