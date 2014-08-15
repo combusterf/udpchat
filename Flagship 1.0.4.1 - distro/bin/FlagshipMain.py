@@ -69,10 +69,10 @@ def listen():
                     #FIX: Update these command outputs
                     if data[1:4]=="new":
                         print data[5:]
-                        mesg = UDPFunc._new(eval(data[5:]),log)
+                        mesg = UDPFunc._new(data[5:].split(),log)
                         Servermesg(ChatLog, mesg)
                     elif data[1:6]=="color":
-                        mesg = UDPFunc._color(eval(data[7:]),log)
+                        mesg = UDPFunc._color(data[7:].split(),log)
                         print mesg
                         #Servermesg(ChatLog, mesg)
                     elif data[1:4]=="sys":
@@ -127,8 +127,8 @@ def send(EntryText):
                 #print isinstance(mesg, basestring)
                 if isinstance(mesg, basestring) == False:
                     for a in mesg:                             
-                             Servermesg(ChatLog, mesg[a])
-                             log.write("Removed "+IP_Lookup[a]+'\n')
+                        Servermesg(ChatLog, mesg[a])
+                        log.write("Removed "+IP_Lookup[a]+'\n')
                 else:
                     Servermesg(ChatLog, mesg)
             elif switch=="list":
@@ -429,7 +429,7 @@ def func(val):
         print "Group List selected."
 
     else:
-    	print "Already displaying that."
+        print "Already displaying that."
 
 
             
@@ -540,7 +540,7 @@ QUIT.clear()
 
 l=threading.Thread(target=listen)
 #s=threading.Thread(target=send)
-  # set thread to daemon ('ok' won't be ChatLog.insert(END, ed in this case)
+# set thread to daemon ('ok' won't be ChatLog.insert(END, ed in this case)
 l.start()
 #s.start()
 base.mainloop()

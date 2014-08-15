@@ -134,15 +134,18 @@ class mainGUI(Frame):
             #test = test + '\n' + test
             #self.master.geometry("400x400")
             self.toolbarDrop.CList = Canvas(self.toolbarDrop, bd=0, bg="white")
+            #self.toolbarDrop.CList.scrollbar = Scrollbar(self.toolbarDrop.CList,{"orient":"vertical", "command":self.toolbarDrop.CList.yview})
+            #self.toolbarDrop.CList.configure(yscrollcommand=self.toolbarDrop.CList.scrollbar.set)
+            #self.toolbarDrop.CList.scrollbar.pack({"side":"right", "fill":"y"})
             self.toolbarDrop.CList.Buttons = []
             self.toolbarDrop.photo = PhotoImage(file="temp.gif")
             self.toolbarDrop.CList.pics = []
             for a in self.UDPSettings.Users:
-                self.toolbarDrop.CList.Buttons.append(Button(self.toolbarDrop.CList,{"text":a+": "+self.UDPSettings.Users[a][0], "bg":"white", "bd":0, "command":lambda IP=self.UDPSettings.Users[a][0]:self.baka(IP), "compound":"right", "image":self.toolbarDrop.photo}))
+                self.toolbarDrop.CList.Buttons.append(Button(self.toolbarDrop.CList,{"text":a+": "+self.UDPSettings.Users[a][0], "bg":"white", "bd":1, "command":lambda IP=self.UDPSettings.Users[a][0]:self.baka(IP), "compound":"right", "image":self.toolbarDrop.photo}))
             for a in self.toolbarDrop.CList.Buttons:
                 a.pack({"side":"top","fill":"x"})
             #self.toolbarDrop.CList.config(state=DISABLED)
-            self.toolbarDrop.CList.place(x=6, y=0, width=350, height=350)
+            self.toolbarDrop.CList.place(x=6, y=0, width=350)#, width=350, height=350)
             
 
             """
@@ -196,29 +199,24 @@ class mainGUI(Frame):
             print "Already displaying that."
 
     def addUser(self):
+        #TODO: Turn into class
         self.addBase = Toplevel(self)
         self.addBase.geometry("200x75")
         self.addBase.title("Add User")
         self.addBase.adder = Frame(self.addBase)
         self.addBase.adder.pack({"fill":"both","expand":True})
-        self.addBase.adder.Name = Frame(self.addBase.adder)
-        self.addBase.adder.Name.pack({"fill":"x"})
-        self.addBase.adder.Name.Label = Label(self.addBase.adder.Name,{"text":"Name:"})
-        self.addBase.adder.Name.Label.pack({"side":"left"})
-        self.addBase.adder.Name.Box = Entry(self.addBase.adder.Name)
-        self.addBase.adder.Name.Box.pack({"side":"left","expand":True})
-        self.addBase.adder.IPAddr = Frame(self.addBase.adder)
-        self.addBase.adder.IPAddr.pack({"fill":"x"})
-        self.addBase.adder.IPAddr.Label = Label(self.addBase.adder.IPAddr,{"text":"IP Address:"})
-        self.addBase.adder.IPAddr.Label.pack({"side":"left"})
-        self.addBase.adder.IPAddr.Box = Entry(self.addBase.adder.IPAddr)
-        self.addBase.adder.IPAddr.Box.pack({"side":"left","expand":True})
-        self.addBase.adder.Buttons = Frame(self.addBase.adder)
-        self.addBase.adder.Buttons.pack({"side":"top"})
-        self.addBase.adder.Buttons.OK = Button(self.addBase.adder.Buttons,{"text":"OK","command":lambda:self.addButton([self.addBase.adder.Name.Box.get(),self.addBase.adder.IPAddr.Box.get()])})
-        self.addBase.adder.Buttons.OK.pack({"side":"left"})
-        self.addBase.adder.Buttons.Cancel = Button(self.addBase.adder.Buttons, {"text":"Cancel","command":self.addBase.destroy})
-        self.addBase.adder.Buttons.Cancel.pack({"side":"left"})
+        self.addBase.adder.nLabel = Label(self.addBase.adder,{"text":"Name:"})
+        self.addBase.adder.nLabel.grid(row=0,column=0,sticky=W)
+        self.addBase.adder.nBox = Entry(self.addBase.adder)
+        self.addBase.adder.nBox.grid(row=0, column=1)
+        self.addBase.adder.IPLabel = Label(self.addBase.adder,{"text":"IP Address:"})
+        self.addBase.adder.IPLabel.grid(row=1,column=0,sticky=W)
+        self.addBase.adder.IPBox = Entry(self.addBase.adder)
+        self.addBase.adder.IPBox.grid(row=1,column=1)
+        self.addBase.adder.BOK = Button(self.addBase.adder,{"text":"OK","command":lambda:self.addButton([self.addBase.adder.nBox.get(),self.addBase.adder.IPBox.get()])})
+        self.addBase.adder.BOK.grid(row=2,column=0,sticky=E)
+        self.addBase.adder.BCancel = Button(self.addBase.adder, {"text":"Cancel","command":self.addBase.destroy})
+        self.addBase.adder.BCancel.grid(row=2,column=1,sticky=W)
 
     def addButton(self, args, log=None):
         self.UDPFunc._new(args,log)

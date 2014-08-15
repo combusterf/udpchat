@@ -209,10 +209,13 @@ def _kill(_list, log):
     mesg = "Removed "+jlist(killed)+" from contacts and conversation."
     return mesg
 def _send(user, log):
+    word = ""
+    for a in user.split():
+        word = word+" "+a    
     x = set(UDP_IP2)
     for a in x:
         sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-        sock.sendto("/new "+str(user), (a, UDP_PORT2))
+        sock.sendto("/new"+word, (a, UDP_PORT2))
         sock.close()
     del x
     return "Sent "+user[0]+" to everyone"
@@ -222,19 +225,14 @@ def _color(_list, log):
     else:
         return "Improper Syntax."
     if a.lower() == 'me':
-        print "BBBBBBBBBBBBBBBBBBBBB"
         if c in colors:
             uname[1]=colors[c]
-            print "HERE"
         elif c[0]!='#':
-            print "OR HERE?"
             c='#'+c
             uname[1]=c
         elif c[0]=='#':
-            print "OR HERE?"
             uname[1]=c
         else:
-            print ">.>"
             return "Improper Syntax."
         print "..........wut."
         with open("UDPSettings.py","r") as U_File:
@@ -258,7 +256,9 @@ def _color(_list, log):
             for d in Users.items():
                 U_File.write(str(d)+'\n')
         mesg = "Changed "+a+"'s color to "+c
-    elif a.lower() in Users_l and len(c)==7:
+    elif a.lower() in Users_l:
+        if c[0] != '#':
+            c = '#'+c
         Users[Users_l[a.lower()]]=(Users[Users_l[a.lower()]][0],c)
         with open('userstemp.cfg', 'w') as U_File:
             for d in Users.items():
@@ -276,7 +276,7 @@ def _mycolor(_list, log):
     x = set(UDP_IP2)
     for a in x:
         sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-        sock.sendto("/color "+str([uname[0],color]), (a, UDP_PORT2))
+        sock.sendto("/color "+uname[0]+" "+color, (a, UDP_PORT2))
         sock.close()
     del x
     _color(['me',color],log)
