@@ -91,7 +91,9 @@ def _remove(_list, log):
     if len(notin)!=0:
         mesg = mesg+'\n'+jlist(notin)+" were not in conversation."
     if len(mesg)!=0:
-        log.write(mesg+'\n')
+        if log:
+            log.write(mesg+'\n')
+        print mesg
         return mesg
     else:
         return "Nobody Removed."
@@ -123,14 +125,16 @@ def _help(_list=['all']):
         mesg = mesg+a
     mesg = mesg[:-1]
     return mesg
-def _new(_list, log):
+def _new(_list, log=None):
     if len(_list)==2:
         [a,c] = _list[0:2]
-        color = "04B404"
+        color = "#04B404"
     elif len(_list)==3:
         [a,c,color]=_list[0:3]
     else:
         return "Improper Syntax."
+    print a
+    print c
     if a.lower() not in Users_l and c not in IP_Lookup:
         Users[a]=(c,color)
         Users_l[a.lower()]=a
@@ -138,7 +142,8 @@ def _new(_list, log):
         with open('users.cfg', 'a') as U_File:
             U_File.write(str((a,(c,color)))+'\n')
         mesg = "Added "+a+" to contacts."
-        log.write("Added "+a+" to contacts.\n")
+        if log:
+            log.write("Added "+a+" to contacts.\n")
     elif c in IP_Lookup:
         del Users[IP_Lookup[c]]
         del Users_l[IP_Lookup[c].lower()]
@@ -154,12 +159,12 @@ def _new(_list, log):
             for d in Users.items():
                 U_File.write(str(d)+'\n')
         mesg = "Changed "+oldname+"'s name to "+a
-        log.write("Changed "+oldname+"'s name to "+a+'\n')
+        if log:
+            log.write("Changed "+oldname+"'s name to "+a+'\n')
         del oldname
     else:
-        if Users[Users_l[a.lower()]][0] in UDP_IP2:
-            UDP_IP2.remove(Users[Users_l[a.lower()]][0])
-        del IP_Lookup[Users[Users_l[a.lower()]][0]]
+        UDP_IP2.remove(Users[a][0])
+        del IP_Lookup[Users[a]][0]
         IP_Lookup[c]=a
         Users[a]=(c,color)
         Users_l[a.lower()]=a
@@ -171,10 +176,12 @@ def _new(_list, log):
             for d in Users.items():
                 U_File.write(str(d)+'\n')
         mesg = "Changed "+a+"'s IP to "+c
-        log.write("Changed "+a+"'s IP to "+c+'\n')
+        if log:
+            log.write("Changed "+a+"'s IP to "+c+'\n')
     UDP_IP2.add(c)
     if uname[0].lower()==a.lower():
         _remove([a],log)
+    print mesg
     return mesg
 def _kill(_list, log):
     killed = set([])
@@ -214,15 +221,22 @@ def _color(_list, log):
         [a,c] = _list[0:2]
     else:
         return "Improper Syntax."
-    if c not in colors and c[0]!="#":
-        c='#'+c
     if a.lower() == 'me':
+        print "BBBBBBBBBBBBBBBBBBBBB"
         if c in colors:
             uname[1]=colors[c]
+            print "HERE"
+        elif c[0]!='#':
+            print "OR HERE?"
+            c='#'+c
+            uname[1]=c
         elif c[0]=='#':
+            print "OR HERE?"
             uname[1]=c
         else:
+            print ">.>"
             return "Improper Syntax."
+        print "..........wut."
         with open("UDPSettings.py","r") as U_File:
             with open("USettemp.txt","w+") as U2:
                 for line in U_File:

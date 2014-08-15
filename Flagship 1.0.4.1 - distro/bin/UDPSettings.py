@@ -30,5 +30,5 @@ functions = {"quit":"Safely quits message system.",
              "colors":"Displays colors of all users in contacts."}
 colors = {"aqua":"#00FFFF","black":"#000000","blue":"#0000FF","fuchsia":"#FF00FF","gray":"#808080","green":"#008000","lime":"#00FF00","maroon":"#800000",
           "navy":"#000080","olive":"#808000","purple":"#800080","red":"#FF0000","silver":"#C0C0C0","teal":"#008080","white":"#FFFFFF","yellow":"#FFFF00"}
-uname = ["Kit","#999999"]
+uname = ["Jacob","#00FFFF"]
 FirstRun = 0

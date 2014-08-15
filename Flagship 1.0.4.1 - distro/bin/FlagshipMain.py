@@ -31,6 +31,9 @@ nline = 0
 nonl = 0
 test = "test"
 
+global display
+display = 0
+
 #Writes a log to logs folder in the form 'logYYYY-MM-DD HHMMSS.txt'
 #When there is no path, it creates one
 if not os.path.exists("./logs"):
@@ -253,7 +256,7 @@ def ClickAction():
             del(tlist)
             log.write(talk+'.\n')
             Servermesg(ChatLog, talk+'\n')
-        elif client == "all":
+        elif client.lower() == "all":
             for a in Users:
                 EntryText = ""
                 UDP_IP2.add(Users[a][0])
@@ -378,7 +381,9 @@ def newgchat():
 
 def func(val):
     global test
-    if val == "Contact List":
+    global display
+    if val == "Contact List" and display!=1:
+        display = 1
         print "Contact List selected."
         #test = test + '\n' + test
         base.geometry("400x400")
@@ -403,23 +408,28 @@ def func(val):
         label = Label(CList, image = photo)
         label.image = photo
         label.pack(side=RIGHT)
-        
 
         
-    elif val == "Directory Tree":
+    elif val == "Directory Tree" and display !=2:
+        display = 2
         print "Directory Tree selected."
-    elif val == "Tool Chest":
-    	print "Toolbox selected."
-    	base.geometry("400x400")
-    	toolbox = Frame(base)
-    	b = Button(toolbox, text="Dice Roller", width=10, command=shit)
-    	b.pack(side=LEFT)
-    	toolbox.pack(side=BOTTOM, fill=X)
+    elif val == "Tool Chest" and display !=3:
+        display = 3
+        print "Tool Chest selected."
+        base.geometry("400x400")
+        toolbox = Frame(base)
+        b = Button(toolbox, text="Dice Roller", width=10, command=shit)
+        b.pack(side=LEFT)
+        toolbox.pack(side=BOTTOM, fill=X)
 
 
+
+    elif val == "Group List" and display!=4:
+        display = 4
+        print "Group List selected."
 
     else:
-        print "Group List selected."
+    	print "Already displaying that."
 
 
             
